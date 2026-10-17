@@ -936,13 +936,262 @@ p {
 }
 
 .cheat-section--terms .inline-term-list {
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 14px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .cheat-section--terms .inline-term-list li {
-  min-width: auto;
-  padding: 4px 7px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
   background: var(--surface);
+}
+
+.cheat-section--terms .inline-term-list code {
+  flex: 0 0 auto;
+  color: var(--accent-strong);
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+.cheat-section--terms .inline-term-list span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.cheat-header__related {
+  margin-top: 18px;
+  font-size: 0.94rem;
+}
+
+.cheat-fragment-note {
+  max-width: 900px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.84rem !important;
+  font-style: italic;
+}
+
+.cheat-toolbar {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(190px, 260px) auto;
+  align-items: end;
+  gap: 14px;
+  margin: -12px 0 28px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.cheat-toolbar__field {
+  display: grid;
+  gap: 6px;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.cheat-toolbar__field input,
+.cheat-toolbar__field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+}
+
+.cheat-toolbar__field input:focus-visible,
+.cheat-toolbar__field select:focus-visible,
+.cheat-toolbar__print:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+.cheat-toolbar__print {
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.cheat-toolbar__print:hover {
+  background: var(--accent-strong);
+}
+
+.cheat-section[hidden],
+.cheat-toc a[hidden],
+.cheat-no-results[hidden] {
+  display: none !important;
+}
+
+.cheat-no-results {
+  margin: 0 0 28px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.96rem;
+}
+
+.cheat-tip {
+  margin-top: 11px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.cheat-tip strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent);
+  font-size: 0.83rem;
+}
+
+.cheat-tip p {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.clean-code-page {
+  padding-top: 58px;
+}
+
+.clean-code-header {
+  max-width: 800px;
+  margin-bottom: 40px;
+}
+
+.clean-code-header h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2.4rem, 5vw, 3.7rem);
+  line-height: 1.04;
+}
+
+.clean-code-kicker {
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
+.clean-code-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.clean-code-actions button {
+  padding: 8px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.clean-code-section {
+  padding: 24px 0 28px;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 24px;
+}
+
+.clean-code-section h2 {
+  margin: 0 0 10px;
+  font-size: 1.55rem;
+}
+
+.clean-code-section > p {
+  max-width: 800px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+.clean-code-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.clean-code-comparison h3 {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.clean-code-usage {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+}
+
+.clean-code-usage h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.clean-code-usage > p {
+  margin: 0 0 10px;
+  font-size: 0.93rem;
+}
+
+.clean-code-note,
+.clean-code-footnote {
+  margin-top: 16px;
+  font-size: 0.91rem !important;
+}
+
+.clean-code-footnote {
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 900px) {
+  .cheat-toolbar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .cheat-toolbar__print {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .cheat-toolbar,
+  .clean-code-comparison {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cheat-toolbar__print {
+    grid-column: auto;
+  }
+
+  .clean-code-page {
+    padding-top: 34px;
+  }
 }
 
 .lecture-list,
@@ -2801,5 +3050,205 @@ html {
     min-height: 0 !important;
     padding: 28pt 32pt !important;
     break-after: page;
+  }
+}
+
+
+@page {
+  size: A4;
+  margin: 10mm 11mm 11mm;
+}
+
+@media print {
+  .cheat-toolbar,
+  .cheat-header__related,
+  .clean-code-actions,
+  .clean-code-kicker,
+  .copy-code__copy {
+    display: none !important;
+  }
+
+  .cheat-header h1 {
+    margin-bottom: 4pt !important;
+    font-size: 22pt !important;
+  }
+
+  .cheat-header > p {
+    margin-bottom: 4pt !important;
+    font-size: 9pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .cheat-fragment-note {
+    margin-top: 2pt !important;
+    font-size: 8pt !important;
+  }
+
+  .cheat-section[hidden] {
+    display: block !important;
+  }
+
+  .cheat-layout {
+    display: block !important;
+  }
+
+  .cheat-grid {
+    display: block !important;
+  }
+
+  .cheat-section {
+    break-inside: avoid-page;
+    margin-top: 5pt !important;
+    padding-top: 0 !important;
+  }
+
+  .cheat-section h2 {
+    margin-bottom: 2pt !important;
+    font-size: 12.5pt !important;
+    line-height: 1.15 !important;
+  }
+
+  .cheat-section > p {
+    margin-bottom: 4pt !important;
+    font-size: 8.7pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .cheat-tip {
+    margin-top: 3pt !important;
+    padding: 4pt 6pt !important;
+    border-color: #bbbbbb;
+    font-size: 8pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .cheat-tip p {
+    margin: 1pt 0 0 !important;
+    font-size: 8pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .cheat-section--terms .inline-term-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2pt 7pt !important;
+    margin: 3pt 0 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  .cheat-section--terms .inline-term-list li {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 5pt !important;
+    margin: 0 !important;
+    padding: 2pt 4pt !important;
+    border-bottom: 0.5pt solid #cccccc !important;
+    background: #ffffff !important;
+    break-inside: avoid-page;
+  }
+
+  .cheat-section--terms .inline-term-list code {
+    flex: 0 0 auto !important;
+    color: #000000 !important;
+    font-size: 7.8pt !important;
+    font-weight: bold !important;
+  }
+
+  .cheat-section--terms .inline-term-list span {
+    color: #222222 !important;
+    font-size: 7.4pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .clean-code-section {
+    /* Let shorter sections flow naturally instead of pushing the final rule
+       onto an almost-empty extra page. Keep individual code examples intact. */
+    break-inside: auto;
+    margin-top: 4pt !important;
+    padding: 4pt 0 0 !important;
+  }
+
+  .clean-code-section h2 {
+    margin: 0 0 3pt !important;
+    font-size: 11.5pt !important;
+    line-height: 1.15 !important;
+    break-after: avoid-page;
+  }
+
+  .clean-code-section > p,
+  .clean-code-usage > p {
+    margin-bottom: 3pt !important;
+    font-size: 8.2pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .clean-code-comparison {
+    display: block !important;
+    margin-top: 3pt !important;
+  }
+
+  .clean-code-comparison > div {
+    margin-bottom: 3pt;
+    break-inside: avoid-page;
+  }
+
+  .clean-code-section .copy-code pre {
+    padding: 3pt 4pt !important;
+    font-size: 6.8pt !important;
+    line-height: 1.12 !important;
+  }
+
+  .clean-code-section .copy-code {
+    margin-top: 2pt !important;
+  }
+
+  .clean-code-usage {
+    margin-top: 7pt !important;
+    padding: 6pt 8pt !important;
+    background: #ffffff !important;
+    break-inside: avoid-page;
+  }
+
+  .clean-code-usage h3,
+  .clean-code-comparison h3 {
+    margin-bottom: 3pt !important;
+    font-size: 9.5pt !important;
+  }
+
+  .clean-code-note,
+  .clean-code-footnote {
+    margin-top: 5pt !important;
+    font-size: 8.5pt !important;
+  }
+
+  .copy-code {
+    break-inside: avoid-page;
+    border: 1px solid #cccccc !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .copy-code pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 5pt !important;
+    border: 0 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-size: 7.8pt !important;
+    line-height: 1.18 !important;
+  }
+
+  .copy-code code,
+  .copy-code .code-line {
+    min-width: 0 !important;
+    padding-left: 0 !important;
+    white-space: pre-wrap !important;
+    color: #111111 !important;
+  }
+
+  .clean-code-page {
+    padding-top: 0 !important;
   }
 }

@@ -5,7 +5,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 type Pair = { sk: string; en: string };
 
-const codeSections: Array<{ id: string; title: Pair; note: Pair; code: string }> = [
+const codeSections: Array<{ id: string; title: Pair; note: Pair; code: string; tip?: Pair }> = [
   {
     id: "premenne",
     title: { sk: "Premenné a typy", en: "Variables and Types" },
@@ -54,7 +54,8 @@ range(0, 10, 2) # 0, 2, 4, 6, 8`
     note: { sk: "Meniteľná usporiadaná kolekcia.", en: "Mutable ordered collection." },
     code: `names = ["Anna", "Peter"]
 names.append("Lucia")
-first = names[0]`
+first = names[0]`,
+    tip: { sk: "Metóda sort() mení pôvodný zoznam a vracia None. Ak chceš nový zoradený zoznam, použi sorted(values).", en: "sort() changes the original list and returns None. Use sorted(values) when you need a new sorted list." }
   },
   {
     id: "tuple",
@@ -78,7 +79,8 @@ courses.add("Testovanie")`
 points["Lucia"] = 78
 
 for name, score in points.items():
-    print(name, score)`
+    print(name, score)`,
+    tip: { sk: "Prístup k hodnote cez chýbajúci kľúč vyvolá KeyError. Pri voliteľnom kľúči použi get().", en: "Accessing a missing key raises KeyError. Use get() for an optional key." }
   },
   {
     id: "slicing",
@@ -89,7 +91,8 @@ values[-1]
 values[1:4]
 values[:3]
 values[::2]
-values[::-1]`
+values[::-1]`,
+    tip: { sk: "Horná hranica rezu sa nezahŕňa. Napríklad values[1:4] vráti prvky s indexmi 1, 2 a 3.", en: "The stop index is excluded. For example, values[1:4] returns items at indexes 1, 2 and 3." }
   },
   {
     id: "membership",
@@ -106,14 +109,16 @@ if "Python" not in courses:
     title: { sk: "enumerate()", en: "enumerate()" },
     note: { sk: "Index a hodnota počas iterácie.", en: "Index and value during iteration." },
     code: `for index, value in enumerate(values):
-    print(index, value)`
+    print(index, value)`,
+    tip: { sk: "Ak potrebuješ index aj hodnotu, preferuj enumerate() pred range(len(values)).", en: "When you need both index and value, prefer enumerate() over range(len(values))." }
   },
   {
     id: "zip",
     title: { sk: "zip()", en: "zip()" },
     note: { sk: "Súbežná iterácia cez viac kolekcií.", en: "Parallel iteration over multiple collections." },
     code: `for name, score in zip(names, scores):
-    print(name, score)`
+    print(name, score)`,
+    tip: { sk: "zip() sa štandardne zastaví pri najkratšej iterovateľnej hodnote. Over, či majú vstupné kolekcie očakávanú dĺžku.", en: "zip() stops at the shortest iterable by default. Check that input collections have the expected lengths." }
   },
   {
     id: "unpacking",
@@ -129,14 +134,16 @@ name, *middle, last = values`
     code: `squares = [n ** 2 for n in numbers]
 positive = [n ** 2 for n in numbers if n > 0]
 unique_courses = {course for _, course in records}
-points_by_name = {name: points for name, points in rows}`
+points_by_name = {name: points for name, points in rows}`,
+    tip: { sk: "Comprehension používaj pri jednoduchom transformovaní alebo filtrovaní. Ak je vnútri viac podmienok či krokov, obyčajný cyklus môže byť čitateľnejší.", en: "Use a comprehension for a simple transformation or filter. If it needs many conditions or steps, a regular loop may be clearer." }
   },
   {
     id: "funkcie",
     title: { sk: "Funkcie", en: "Functions" },
     note: { sk: "Pomenovaná časť logiky s návratovou hodnotou.", en: "Named unit of logic with a return value." },
     code: `def average(values):
-    return sum(values) / len(values)`
+    return sum(values) / len(values)`,
+    tip: { sk: "Rozhodni sa, čo má funkcia robiť pri prázdnom zozname. Bez kontroly by delenie nulou vyvolalo ZeroDivisionError.", en: "Decide how the function should handle an empty list. Without a check, division by zero raises ZeroDivisionError." }
   },
   {
     id: "arguments",
@@ -146,14 +153,16 @@ points_by_name = {name: points for name, points in rows}`
     return f"{greeting}, {name}"
 
 greet("Anna")
-greet(name="Peter", greeting="Dobré ráno")`
+greet(name="Peter", greeting="Dobré ráno")`,
+    tip: { sk: "Vyhni sa meniteľným predvoleným argumentom, napríklad def add(item, items=[]). Zoznam sa potom môže zdieľať medzi volaniami.", en: "Avoid mutable default arguments such as def add(item, items=[]). The same list may then be shared between calls." }
   },
   {
     id: "type-hints",
     title: { sk: "Type hints", en: "Type Hints" },
     note: { sk: "Typy ako súčasť čitateľného API.", en: "Types as part of a readable API." },
     code: `def passed(points: int, threshold: int = 50) -> bool:
-    return points >= threshold`
+    return points >= threshold`,
+    tip: { sk: "Type hints zlepšujú dokumentáciu a podporu IDE, ale samy osebe nekontrolujú typy pri behu programu.", en: "Type hints improve documentation and IDE support, but do not validate types at runtime by themselves." }
   },
   {
     id: "dataclass",
@@ -171,10 +180,14 @@ class Result:
     id: "exceptions",
     title: { sk: "Exceptions", en: "Exceptions" },
     note: { sk: "Kontrolované spracovanie chýb.", en: "Controlled exception handling." },
-    code: `try:
-    points = int(text)
+    code: `user_input = input("Počet bodov: ")
+try:
+    points = int(user_input)
 except ValueError:
-    points = 0`
+    print("Zadaj celé číslo.")
+else:
+    print(f"Zadané body: {points}")`,
+    tip: { sk: "Neplatný vstup nepremeň automaticky na 0, ak 0 má skutočný význam. Oznám chybu alebo zopakuj vstup podľa potreby.", en: "Do not silently turn invalid input into 0 when 0 has a real meaning. Report the error or ask for input again as appropriate." }
   },
   {
     id: "imports",
@@ -182,7 +195,8 @@ except ValueError:
     note: { sk: "Použitie modulov a konkrétnych objektov.", en: "Use modules and specific objects." },
     code: `import math
 from pathlib import Path
-from dataclasses import dataclass`
+from dataclasses import dataclass`,
+    tip: { sk: "Vyhni sa from module import *. Z kódu potom nie je jasné, odkiaľ názvy pochádzajú.", en: "Avoid from module import *. It makes it unclear where names come from." }
   },
   {
     id: "strings",
@@ -193,7 +207,8 @@ text.split(",")
 text.lower()
 text.replace("old", "new")
 text.startswith("ERR")
-text.endswith(".py")`
+text.endswith(".py")`,
+    tip: { sk: "Reťazce sú nemenné. Metóda replace() vytvorí nový reťazec; ak ho potrebuješ, priraď výsledok do premennej.", en: "Strings are immutable. replace() returns a new string; assign the result if you need to keep it." }
   },
   {
     id: "patterns",
@@ -207,10 +222,115 @@ for key, value in data.items():
 
 if item in collection:
     ...`
+  },
+  {
+    id: "oop",
+    title: { sk: "Triedy a objekty (OOP)", en: "Classes and Objects (OOP)" },
+    note: { sk: "Trieda opisuje spoločnú štruktúru a správanie objektov; objekt je konkrétna inštancia triedy.", en: "A class describes shared object structure and behavior; an object is a particular instance of a class." },
+    code: `class Student:
+    def __init__(self, name, points):
+        self.name = name
+        self.points = points
+
+    def passed(self, threshold=50):
+        return self.points >= threshold
+
+student = Student("Anna", 72)
+print(student.passed())`,
+    tip: { sk: "self odkazuje na konkrétnu inštanciu. Pri volaní student.passed() ho Python odovzdá automaticky.", en: "self refers to the current instance. Python passes it automatically when you call student.passed()." }
+  },
+  {
+    id: "pathlib",
+    title: { sk: "pathlib", en: "pathlib" },
+    note: { sk: "Práca s cestami a súbormi bez skladania ciest pomocou textových reťazcov.", en: "Work with paths and files without manually joining path strings." },
+    code: `from pathlib import Path
+
+folder = Path("data")
+file_path = folder / "notes.txt"
+
+if file_path.exists():
+    text = file_path.read_text(encoding="utf-8")`,
+    tip: { sk: "Používaj Path namiesto ručného spájania ciest pomocou '/'. Pri textových súboroch uvádzaj encoding.", en: "Use Path instead of manually joining path strings. Specify an encoding for text files." }
+  },
+  {
+    id: "json",
+    title: { sk: "json", en: "json" },
+    note: { sk: "Prevod medzi Python dátami a textovým formátom JSON.", en: "Convert between Python data and the JSON text format." },
+    code: `import json
+
+student = {"name": "Anna", "points": 92}
+text = json.dumps(student, ensure_ascii=False)
+restored = json.loads(text)`,
+    tip: { sk: "loads() parsuje text, load() číta zo súborového objektu; dumps() vytvorí text, dump() zapisuje do súboru.", en: "loads() parses text and load() reads a file object; dumps() creates text and dump() writes to a file object." }
+  },
+  {
+    id: "datetime",
+    title: { sk: "datetime", en: "datetime" },
+    note: { sk: "Dátumy, časy a časové rozdiely bez manuálneho spracovania reťazcov.", en: "Work with dates, times and time differences without manually parsing strings." },
+    code: `from datetime import date, datetime
+
+today = date.today()
+now = datetime.now()
+print(today.isoformat())
+print(now.strftime("%Y-%m-%d %H:%M"))`,
+    tip: { sk: "Pri čase závislom od časového pásma zváž timezone-aware datetime; samotné datetime.now() vracia lokálny čas bez explicitnej zóny.", en: "For timezone-dependent work, consider timezone-aware datetimes; datetime.now() alone returns local time without an explicit timezone." }
+  },
+  {
+    id: "collections",
+    title: { sk: "collections.Counter", en: "collections.Counter" },
+    note: { sk: "Počítanie výskytov hodnôt bez ručného udržiavania počítadiel.", en: "Count value occurrences without maintaining counters manually." },
+    code: `from collections import Counter
+
+votes = ["A", "B", "A", "C", "A"]
+counts = Counter(votes)
+print(counts["A"])  # 3
+print(counts.most_common(2))`,
+    tip: { sk: "Counter je užitočný na frekvencie. Ak potrebuješ len jedinečné hodnoty, môže stačiť set.", en: "Counter is useful for frequencies. If you only need unique values, a set may be enough." }
+  },
+  {
+    id: "re",
+    title: { sk: "re", en: "re" },
+    note: { sk: "Vyhľadávanie a kontrola textu pomocou regulárnych výrazov.", en: "Search and validate text patterns with regular expressions." },
+    code: `import re
+
+text = "Order number: 4582"
+match = re.search(r"\\d+", text)
+if match:
+    order_number = int(match.group())`,
+    tip: { sk: "Regulárny výraz používaj na vzory textu, nie ako náhradu parsera pre zložitý formát.", en: "Use regular expressions for text patterns, not as a substitute for a parser for complex formats." }
   }
 ];
 
-const builtins = ["len", "min", "max", "sum", "sorted", "enumerate", "zip", "range", "any", "all", "type"] as const;
+const builtins: Array<{ name: string; description: Pair }> = [
+  { name: "len(x)", description: { sk: "Počet prvkov.", en: "Number of items." } },
+  { name: "min(x) / max(x)", description: { sk: "Najmenšia / najväčšia hodnota.", en: "Smallest / largest value." } },
+  { name: "sum(x)", description: { sk: "Súčet číselných hodnôt.", en: "Sum of numeric values." } },
+  { name: "sorted(x)", description: { sk: "Vytvorí nový zoradený zoznam.", en: "Returns a new sorted list." } },
+  { name: "enumerate(x)", description: { sk: "Index aj hodnota pri iterácii.", en: "Index and value during iteration." } },
+  { name: "zip(a, b)", description: { sk: "Páruje položky z viacerých iterovateľných hodnôt.", en: "Pairs items from multiple iterables." } },
+  { name: "range(n)", description: { sk: "Číselná postupnosť.", en: "Numeric sequence." } },
+  { name: "any(x) / all(x)", description: { sk: "Test, či je niektorá / každá hodnota pravdivá.", en: "Test whether any / all values are truthy." } },
+  { name: "type(x)", description: { sk: "Vráti typ objektu.", en: "Returns the object's type." } }
+] as const;
+const categoryById: Record<string, string> = {
+  premenne: "basics", podmienky: "basics", for: "basics", while: "basics", range: "basics",
+  membership: "basics", patterns: "basics", strings: "basics",
+  list: "collections", tuple: "collections", set: "collections", dict: "collections", slicing: "collections",
+  enumerate: "collections", zip: "collections", unpacking: "collections", comprehensions: "collections",
+  funkcie: "functions", arguments: "functions", "type-hints": "functions", dataclass: "functions",
+  exceptions: "errors", imports: "modules",
+  oop: "oop", pathlib: "libraries", json: "libraries", datetime: "libraries", collections: "libraries", re: "libraries"
+};
+const categoryLabels: Record<string, Pair> = {
+  all: { sk: "Všetky témy", en: "All topics" },
+  basics: { sk: "Základy a vzory", en: "Basics and patterns" },
+  collections: { sk: "Kolekcie", en: "Collections" },
+  functions: { sk: "Funkcie", en: "Functions" },
+  oop: { sk: "OOP", en: "OOP" },
+  errors: { sk: "Chyby a výnimky", en: "Errors and exceptions" },
+  modules: { sk: "Moduly", en: "Modules" },
+  libraries: { sk: "Základné knižnice", en: "Standard libraries" }
+};
 const sections = [
   ...codeSections.map((section) => ({ id: section.id, label: section.title })),
   { id: "builtins", label: { sk: "Vstavané funkcie", en: "Built-in Functions" } }
@@ -223,38 +343,113 @@ const sections = [
       <h1><LocalizedText sk="Python ťahák" en="Python Cheatsheet" /></h1>
       <p>
         <LocalizedText
-          sk="Kompaktná referencia základnej syntaxe a bežných Python idiomov."
-          en="A compact reference for core syntax and common Python idioms."
+          sk="Kompaktná referencia s krátkymi vysvetleniami, praktickými ukážkami a tipmi na časté chyby."
+          en="A compact reference with concise explanations, practical examples and tips about common mistakes."
         />
       </p>
+      <p class="cheat-fragment-note">
+        <LocalizedText
+          sk="Niektoré ukážky sú úryvky kódu, nie samostatné programy; používajú premenné alebo vstupy opísané v texte."
+          en="Some examples are code fragments rather than standalone programs; they use variables or inputs described in the text."
+        />
+      </p>
+      <p class="cheat-header__related"><a href="/best-practices/"><LocalizedText sk="Samostatná sekcia: Best Practices / Clean Code →" en="Separate section: Best Practices / Clean Code →" /></a></p>
     </header>
+
+    <div class="cheat-toolbar" aria-label="Cheatsheet tools" data-i18n-aria-label="cheatsheet.toolsAria">
+      <label class="cheat-toolbar__field">
+        <span><LocalizedText sk="Hľadať v ťaháku" en="Search the reference" /></span>
+        <input id="cheat-search" type="search" data-i18n-placeholder="cheatsheet.searchPlaceholder" data-i18n-aria-label="cheatsheet.searchAria" placeholder="Napr. dict.get, pathlib, exceptions" />
+      </label>
+      <label class="cheat-toolbar__field">
+        <span><LocalizedText sk="Kategória" en="Category" /></span>
+        <select id="cheat-category" data-i18n-aria-label="cheatsheet.filterAria">
+          {Object.entries(categoryLabels).map(([id, label]) => <option value={id} data-i18n-key={`cheatsheet.category.${id}`}>{label.sk}</option>)}
+        </select>
+      </label>
+      <button class="cheat-toolbar__print" type="button" id="cheat-print" data-i18n-key="cheatsheet.printPdf">Exportovať PDF</button>
+    </div>
+    <p id="cheat-no-results" class="cheat-no-results" role="status" aria-live="polite" hidden data-i18n-key="cheatsheet.noResults">Nenašli sa žiadne témy. Skús upraviť hľadaný výraz alebo kategóriu.</p>
 
     <div class="cheat-layout">
       <nav class="cheat-toc" aria-label="Obsah Python ťaháku">
-        {sections.map((section) => <a href={`#${section.id}`}><LocalizedText sk={section.label.sk} en={section.label.en} /></a>)}
+        {sections.map((section) => <a href={`#${section.id}`} data-cheat-toc-link={section.id}><LocalizedText sk={section.label.sk} en={section.label.en} /></a>)}
       </nav>
 
       <div class="cheat-content">
         <div class="cheat-grid">
           {
             codeSections.map((section) => (
-              <section id={section.id} class="cheat-section">
+              <section
+                id={section.id}
+                class="cheat-section"
+                data-cheat-section={section.id}
+                data-category={categoryById[section.id] ?? "basics"}
+                data-search={`${section.title.sk} ${section.title.en} ${section.note.sk} ${section.note.en} ${section.code}`}
+              >
                 <h2><LocalizedText sk={section.title.sk} en={section.title.en} /></h2>
                 <p><LocalizedText sk={section.note.sk} en={section.note.en} /></p>
                 <CopyCodeBlock code={section.code} />
+                {section.tip && (
+                  <aside class="cheat-tip">
+                    <strong><LocalizedText sk="Tip" en="Tip" /></strong>
+                    <p><LocalizedText sk={section.tip.sk} en={section.tip.en} /></p>
+                  </aside>
+                )}
               </section>
             ))
           }
 
-          <section id="builtins" class="cheat-section cheat-section--terms">
+          <section id="builtins" class="cheat-section cheat-section--terms" data-cheat-section="builtins" data-category="basics" data-search={`Vstavané funkcie Built-in Functions ${builtins.map((item) => item.name).join(" ")}`}>
             <h2><LocalizedText sk="Vstavané funkcie" en="Built-in Functions" /></h2>
-            <p><LocalizedText sk="Funkcie dostupné bez importu." en="Functions available without an import." /></p>
+            <p><LocalizedText sk="Funkcie dostupné bez importu. Najčastejšie použitie v skratke:" en="Functions available without an import. Common uses at a glance:" /></p>
             <ul class="inline-term-list">
-              {builtins.map((name) => <li><code>{name}</code></li>)}
+              {builtins.map((item) => (
+                <li><code>{item.name}</code><span><LocalizedText sk={item.description.sk} en={item.description.en} /></span></li>
+              ))}
             </ul>
+            <aside class="cheat-tip">
+              <strong><LocalizedText sk="Tip" en="Tip" /></strong>
+              <p><LocalizedText sk="sorted() vytvorí nový zoznam; list.sort() mení existujúci zoznam." en="sorted() returns a new list; list.sort() changes the existing list." /></p>
+            </aside>
           </section>
         </div>
       </div>
     </div>
   </main>
 </BaseLayout>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>("#cheat-search");
+  const categoryInput = document.querySelector<HTMLSelectElement>("#cheat-category");
+  const cheatSections = Array.from(document.querySelectorAll<HTMLElement>("[data-cheat-section]"));
+  const cheatTocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-cheat-toc-link]"));
+  const noResults = document.querySelector<HTMLElement>("#cheat-no-results");
+
+  function applyCheatsheetFilters() {
+    const query = searchInput?.value.trim().toLocaleLowerCase() ?? "";
+    const category = categoryInput?.value ?? "all";
+    let visibleCount = 0;
+
+    for (const section of cheatSections) {
+      const categoryMatches = category === "all" || section.dataset.category === category;
+      const searchable = `${section.dataset.search ?? ""} ${section.textContent ?? ""}`.toLocaleLowerCase();
+      const queryMatches = query.length === 0 || searchable.includes(query);
+      const visible = categoryMatches && queryMatches;
+      section.hidden = !visible;
+      if (visible) visibleCount += 1;
+
+      const link = cheatTocLinks.find((candidate) => candidate.dataset.cheatTocLink === section.id);
+      if (link) link.hidden = !visible;
+    }
+
+    if (noResults) noResults.hidden = visibleCount > 0;
+  }
+
+  searchInput?.addEventListener("input", applyCheatsheetFilters);
+  categoryInput?.addEventListener("change", applyCheatsheetFilters);
+  window.addEventListener("python-course-language-applied", applyCheatsheetFilters);
+
+  document.querySelector<HTMLButtonElement>("#cheat-print")?.addEventListener("click", () => window.print());
+  applyCheatsheetFilters();
+</script>
