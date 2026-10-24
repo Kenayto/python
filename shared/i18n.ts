@@ -41,6 +41,7 @@ export const uiTranslations = {
   "nav.exercises": { sk: "Cvičenia", en: "Exercises" },
   "nav.project": { sk: "Projekt", en: "Project" },
   "nav.guides": { sk: "Návody", en: "Guides" },
+  "nav.oop": { sk: "OOP", en: "OOP" },
   "nav.cheatsheet": { sk: "Cheatsheet", en: "Cheatsheet" },
   "nav.aria": { sk: "Hlavná navigácia", en: "Main navigation" },
 

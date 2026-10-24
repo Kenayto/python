@@ -3252,3 +3252,444 @@ html {
     padding-top: 0 !important;
   }
 }
+
+/* Supplementary OOP learning page */
+.oop-page {
+  max-width: 900px;
+  padding-top: 52px;
+}
+
+.oop-header {
+  max-width: 850px;
+  margin-bottom: 32px;
+}
+
+.oop-header h1 {
+  max-width: 820px;
+  margin-bottom: 14px;
+  font-size: clamp(2.25rem, 5vw, 3.55rem);
+  line-height: 1.05;
+}
+
+.oop-lead {
+  max-width: 800px;
+  font-size: 1.08rem;
+}
+
+.oop-actions {
+  gap: 12px 18px;
+}
+
+.oop-actions .oop-download {
+  font-weight: 650;
+}
+
+.oop-callout {
+  margin: 0 0 28px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+}
+
+.oop-callout h2 {
+  margin: 0 0 10px;
+  font-size: 1.15rem;
+}
+
+.oop-callout ul {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.oop-toc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 0 0 24px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.oop-toc strong {
+  color: var(--ink);
+}
+
+.oop-section {
+  padding: 24px 0 28px;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 24px;
+}
+
+.oop-section > h2 {
+  margin: 0 0 12px;
+  font-size: 1.55rem;
+}
+
+.oop-section > p {
+  max-width: 850px;
+  font-size: 1rem;
+}
+
+.oop-concept-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.oop-concept-card {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.oop-concept-card h3 {
+  margin-bottom: 6px;
+}
+
+.oop-concept-card p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.oop-output {
+  margin: 10px 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.oop-output strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+  color: var(--accent);
+}
+
+.oop-output pre {
+  margin: 0;
+  overflow-x: auto;
+  color: var(--ink);
+  font: 0.85rem/1.5 Consolas, "Courier New", monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.oop-note {
+  margin-top: 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--line);
+  font-size: 0.92rem !important;
+}
+
+.oop-comparison-table-wrap {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.oop-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.oop-comparison-table th,
+.oop-comparison-table td {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.oop-comparison-table th {
+  background: var(--surface-strong);
+  color: var(--ink);
+}
+
+.oop-mistake {
+  margin: 18px 0;
+  padding: 16px 0 4px;
+  border-top: 1px solid var(--line);
+}
+
+.oop-mistake h3 {
+  margin: 0 0 10px;
+}
+
+.oop-mistake > p {
+  font-size: 0.95rem;
+}
+
+.oop-task-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.oop-task-card > p {
+  font-size: 1rem;
+}
+
+.oop-solution,
+.oop-self-check details {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.oop-solution summary,
+.oop-self-check summary {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.oop-solution[open] summary,
+.oop-self-check details[open] summary {
+  margin-bottom: 12px;
+}
+
+.oop-self-check details p {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+.oop-footer-note {
+  margin-top: 12px;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.oop-footer-note p {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .oop-page {
+    padding-top: 34px;
+  }
+
+  .oop-concept-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .oop-toc {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .oop-task-card {
+    padding: 14px;
+  }
+}
+
+@media print {
+  .oop-page {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .oop-actions,
+  .oop-toc,
+  .copy-code__copy {
+    display: none !important;
+  }
+
+  .oop-header h1 {
+    font-size: 22pt !important;
+    line-height: 1.15 !important;
+    break-after: avoid-page;
+  }
+
+  .oop-header,
+  .oop-callout,
+  .oop-concept-grid,
+  .oop-task-card,
+  .oop-footer-note {
+    break-inside: avoid-page;
+  }
+
+  .oop-section {
+    break-inside: auto;
+    padding: 7pt 0 !important;
+  }
+
+  .oop-section > h2,
+  .oop-mistake h3,
+  .oop-task-card > p:first-child {
+    break-after: avoid-page;
+  }
+
+  .oop-concept-card,
+  .oop-callout,
+  .oop-task-card,
+  .oop-output,
+  .oop-mistake,
+  .oop-self-check details {
+    background: #ffffff !important;
+    break-inside: avoid-page;
+  }
+
+  /* Print all hidden <details> content; the script opens them before printing. */
+  .oop-page details,
+  .oop-page details > *:not(summary) {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .oop-page details > summary {
+    display: none !important;
+  }
+
+  .oop-solution {
+    margin-top: 6pt !important;
+    padding: 0 !important;
+    border: 0 !important;
+    break-inside: auto;
+  }
+
+  .oop-solution .copy-code,
+  .oop-solution pre,
+  .oop-output pre {
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .oop-solution .copy-code__content,
+  .oop-solution .copy-code__code,
+  .oop-solution pre {
+    break-inside: avoid-page;
+  }
+
+  .oop-footer-note {
+    break-inside: avoid-page;
+  }
+
+  a {
+    overflow-wrap: anywhere;
+  }
+}
+
+/*
+ * OOP PDF export: allow long sections and code examples to flow across pages.
+ * This prevents large empty areas when a complete code block does not fit
+ * in the remaining space on the current printed page.
+ */
+
+@media print {
+  /* Let sections flow, but start each numbered section on a new page. */
+  .oop-page .oop-section {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    padding: 4pt 0 !important;
+  }
+
+  .oop-page #class-object,
+  .oop-page #init-self,
+  .oop-page #attributes-methods,
+  .oop-page #inheritance,
+  .oop-page #composition,
+  .oop-page #mistakes,
+  .oop-page #practice {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  /* Keep section headings with the content that follows them. */
+  .oop-page .oop-section > h2,
+  .oop-page .oop-mistake > h3,
+  .oop-page .oop-task-card > p:first-child {
+    break-after: avoid-page !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Avoid splitting individual code blocks and their output. */
+  .oop-page .copy-code,
+  .oop-page .copy-code pre,
+  .oop-page .copy-code__content,
+  .oop-page .copy-code__code,
+  .oop-page .oop-output,
+  .oop-page .oop-output pre,
+  .oop-page .oop-concept-grid,
+  .oop-page .oop-comparison-table-wrap,
+  .oop-page .oop-mistake,
+  .oop-page .oop-self-check details {
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+  }
+
+  .oop-page .oop-comparison-table-wrap {
+    overflow: visible !important;
+  }
+
+  /* Wrap long code lines instead of clipping them. */
+  .oop-page .copy-code pre,
+  .oop-page .oop-output pre {
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  /* Reduce whitespace in section 7 and the final notes. */
+  .oop-page #practice {
+    padding-top: 2pt !important;
+    padding-bottom: 2pt !important;
+  }
+
+  .oop-page #practice .oop-task-card {
+    padding: 6pt !important;
+  }
+
+  .oop-page #practice .oop-task-card > p {
+    margin-top: 0 !important;
+    margin-bottom: 4pt !important;
+    font-size: 8.5pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .oop-page .oop-self-check {
+    margin-top: 4pt !important;
+    padding-top: 3pt !important;
+    padding-bottom: 3pt !important;
+  }
+
+  .oop-page .oop-self-check > h2 {
+    margin-top: 0 !important;
+    margin-bottom: 4pt !important;
+  }
+
+  .oop-page .oop-self-check details {
+    margin: 3pt 0 !important;
+    padding: 3pt 5pt !important;
+  }
+
+  .oop-page .oop-self-check details p {
+    margin: 3pt 0 0 !important;
+    font-size: 7.5pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .oop-page .oop-footer-note {
+    margin-top: 4pt !important;
+    padding-top: 4pt !important;
+    break-inside: avoid-page !important;
+    page-break-inside: avoid !important;
+  }
+
+  .oop-page .oop-footer-note p {
+    margin: 2pt 0 !important;
+    font-size: 7.5pt !important;
+    line-height: 1.2 !important;
+  }
+}
