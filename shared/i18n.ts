@@ -59,6 +59,7 @@ export const uiTranslations = {
   "cheatsheet.category.errors": { sk: "Chyby a výnimky", en: "Errors and exceptions" },
   "cheatsheet.category.modules": { sk: "Moduly", en: "Modules" },
   "cheatsheet.category.libraries": { sk: "Základné knižnice", en: "Standard libraries" },
+  "cheatsheet.category.files": { sk: "Súbory a cesty", en: "Files and Paths" },
 
   "language.label": { sk: "Jazyk", en: "Language" },
   "language.sk": { sk: "Slovenčina", en: "Slovak" },

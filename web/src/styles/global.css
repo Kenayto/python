@@ -1049,6 +1049,17 @@ p {
   font-size: 0.96rem;
 }
 
+.cheat-download-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 10px !important;
+}
+
+.cheat-download-links a {
+  font-weight: 650;
+}
+
 .cheat-tip {
   margin-top: 11px;
   padding: 10px 0 0;

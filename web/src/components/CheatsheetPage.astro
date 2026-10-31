@@ -5,7 +5,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 type Pair = { sk: string; en: string };
 
-const codeSections: Array<{ id: string; title: Pair; note: Pair; code: string; tip?: Pair }> = [
+const codeSections: Array<{ id: string; title: Pair; note: Pair; code: string; tip?: Pair; resources?: Array<{ href: string; label: Pair }> }> = [
   {
     id: "premenne",
     title: { sk: "Premenné a typy", en: "Variables and Types" },
@@ -240,64 +240,161 @@ print(student.passed())`,
     tip: { sk: "self odkazuje na konkrétnu inštanciu. Pri volaní student.passed() ho Python odovzdá automaticky.", en: "self refers to the current instance. Python passes it automatically when you call student.passed()." }
   },
   {
+    id: "file-open",
+    title: { sk: "open() a režimy súborov", en: "open() and File Modes" },
+    note: { sk: "Funkcia open() otvorí súbor a vráti objekt, cez ktorý môžeš čítať alebo zapisovať.", en: "The open() function opens a file and returns an object you can use to read or write." },
+    code: `file = open("notes.txt", "r", encoding="utf-8")
+content = file.read()
+file.close()`,
+    tip: { sk: "Režim r číta, w zapisuje od začiatku a prepíše pôvodný obsah, a pridáva na koniec a x vytvorí nový súbor iba vtedy, ak ešte neexistuje. Ak chceš automatické zatvorenie súboru, použi with.", en: "Mode r reads, w writes from the beginning and replaces existing content, a appends to the end, and x creates a new file only if it does not exist. Use with to close the file automatically." }
+  },
+  {
+    id: "file-with",
+    title: { sk: "with – bezpečné otvorenie súboru", en: "with – Safe File Handling" },
+    note: { sk: "Kontextový manažér with zatvorí súbor automaticky aj vtedy, keď počas práce nastane chyba.", en: "The with context manager closes the file automatically, even if an error occurs while working with it." },
+    code: `with open("notes.txt", "r", encoding="utf-8") as file:
+    for line in file:
+        print(line.rstrip())
+
+with open("notes.txt", "a", encoding="utf-8") as file:
+    file.write("Nový riadok\\n")`,
+    tip: { sk: "Pri bežnej práci so súbormi uprednostni with pred ručným file.close(). Riadky môžeš spracovať postupne bez načítania celého súboru do pamäte.", en: "Prefer with over calling file.close() manually. You can process lines one by one without loading the entire file into memory." }
+  },
+  {
     id: "pathlib",
-    title: { sk: "pathlib", en: "pathlib" },
-    note: { sk: "Práca s cestami a súbormi bez skladania ciest pomocou textových reťazcov.", en: "Work with paths and files without manually joining path strings." },
+    title: { sk: "pathlib – cesty, čítanie a zápis", en: "pathlib – Paths, Reading and Writing" },
+    note: { sk: "Path skladá cesty pomocou operátora / a ponúka metódy na kontrolu, čítanie aj zápis súborov.", en: "Path joins path parts with the / operator and provides methods to check, read and write files." },
     code: `from pathlib import Path
 
 folder = Path("data")
-file_path = folder / "notes.txt"
+folder.mkdir(parents=True, exist_ok=True)
 
-if file_path.exists():
-    text = file_path.read_text(encoding="utf-8")`,
-    tip: { sk: "Používaj Path namiesto ručného spájania ciest pomocou '/'. Pri textových súboroch uvádzaj encoding.", en: "Use Path instead of manually joining path strings. Specify an encoding for text files." }
+file_path = folder / "notes.txt"
+file_path.write_text("Ahoj, Košice!\\n", encoding="utf-8")
+
+content = file_path.read_text(encoding="utf-8")
+print(content)
+print(file_path.exists(), file_path.is_file())`,
+    tip: { sk: "write_text() prepíše celý súbor; na pridanie obsahu použi file_path.open(\"a\", encoding=\"utf-8\"). Relatívna cesta sa počíta od aktuálneho pracovného priečinka. V skripte môžeš použiť Path(__file__).resolve().parent.", en: "write_text() replaces the whole file; to append, use file_path.open(\"a\", encoding=\"utf-8\"). A relative path is resolved from the current working directory. In a script, you can use Path(__file__).resolve().parent." }
+  },
+  {
+    id: "file-encoding",
+    title: { sk: "UTF-8 a textové súbory", en: "UTF-8 and Text Files" },
+    note: { sk: "Kódovanie určuje, ako sa znaky prevedú na bajty a späť. UTF-8 správne spracuje aj slovenskú diakritiku.", en: "Encoding determines how characters are converted to bytes and back. UTF-8 handles Slovak diacritics correctly." },
+    code: `message = "Košice, žltý kôň"
+
+with open("message.txt", "w", encoding="utf-8") as file:
+    file.write(message)
+
+with open("message.txt", "r", encoding="utf-8") as file:
+    print(file.read())`,
+    tip: { sk: "Pri textových súboroch uvádzaj encoding=\"utf-8\" pri open(), read_text() aj write_text(). Bez správneho kódovania sa môžu znaky zobraziť nesprávne alebo môže vzniknúť UnicodeDecodeError.", en: "Specify encoding=\"utf-8\" for open(), read_text() and write_text(). Without the correct encoding, characters may display incorrectly or decoding may raise UnicodeDecodeError." }
+  },
+  {
+    id: "file-errors",
+    title: { sk: "Typické chyby pri práci so súbormi", en: "Common File Errors" },
+    note: { sk: "Pri práci so súbormi sa oplatí ošetriť najmä chýbajúcu cestu, nedostatočné oprávnenia a nesprávne kódovanie.", en: "When working with files, handle missing paths, insufficient permissions and incorrect encoding." },
+    code: `from pathlib import Path
+
+file_path = Path("data/notes.txt")
+
+try:
+    text = file_path.read_text(encoding="utf-8")
+except FileNotFoundError:
+    print("Súbor sa nenašiel.")
+except IsADirectoryError:
+    print("Zadaná cesta je priečinok.")
+except PermissionError:
+    print("Nemáš oprávnenie na čítanie.")
+except UnicodeDecodeError:
+    print("Súbor nie je v očakávanom kódovaní.")`,
+    tip: { sk: "FileNotFoundError znamená, že cesta neexistuje; PermissionError signalizuje problém s oprávneniami; IsADirectoryError vznikne, keď sa pokúsiš čítať priečinok ako súbor. Nezachytávaj všeobecné Exception, ak vieš ošetriť konkrétny typ chyby.", en: "FileNotFoundError means the path does not exist; PermissionError indicates an access problem; IsADirectoryError occurs when you try to read a directory as a file. Avoid catching Exception when you can handle a specific error type." }
+  },
+  {
+    id: "file-practice",
+    title: { sk: "Praktický príklad – čítanie a zápis", en: "Practical Example – Read and Write" },
+    note: { sk: "Príklad načíta testovací súbor s údajmi, spracuje riadky a uloží prehľad do výstupného súboru. Testovací súbor obsahuje aj slovenské znaky.", en: "The example reads a test file, processes its lines and saves a summary to an output file. The test file also contains Slovak characters." },
+    code: `python web/static/downloads/file-handling-practice.py
+
+# The script reads:
+# web/static/downloads/file-handling-sample.txt
+
+# It writes a summary to the system temporary directory.`,
+    resources: [
+      { href: "/downloads/file-handling-practice.py", label: { sk: "Stiahnuť Python príklad", en: "Download Python example" } },
+      { href: "/downloads/file-handling-sample.txt", label: { sk: "Stiahnuť testovací súbor", en: "Download sample data file" } }
+    ],
+    tip: { sk: "Spusti príkaz z koreňového priečinka projektu. Skript používa skutočný testovací súbor a výstup uloží do dočasného priečinka operačného systému, nie do zdrojových súborov projektu.", en: "Run the command from the project root. The script uses the supplied sample file and saves its output to the operating system temporary directory, not into the project's source files." }
   },
   {
     id: "json",
     title: { sk: "json", en: "json" },
-    note: { sk: "Prevod medzi Python dátami a textovým formátom JSON.", en: "Convert between Python data and the JSON text format." },
+    note: { sk: "Úloha: ukladať a načítavať štruktúrované dáta, napríklad nastavenia alebo odpoveď API.", en: "Task: store and load structured data such as settings or an API response." },
     code: `import json
 
 student = {"name": "Anna", "points": 92}
-text = json.dumps(student, ensure_ascii=False)
-restored = json.loads(text)`,
-    tip: { sk: "loads() parsuje text, load() číta zo súborového objektu; dumps() vytvorí text, dump() zapisuje do súboru.", en: "loads() parses text and load() reads a file object; dumps() creates text and dump() writes to a file object." }
+
+# Python data -> JSON text
+json_text = json.dumps(student, ensure_ascii=False)
+
+# JSON text -> Python data
+restored = json.loads(json_text)
+print(restored["name"])`,
+    tip: { sk: "Typická chyba: zameniť loads() a load(). loads() prijíma text, load() súborový objekt. JSON tiež nepodporuje napríklad objekty set ani datetime priamo; pred uložením ich treba previesť na podporovaný typ.", en: "Common mistake: mixing up loads() and load(). loads() accepts text, while load() accepts a file object. JSON also does not directly support types such as set or datetime; convert them to a supported type first." }
   },
   {
     id: "datetime",
     title: { sk: "datetime", en: "datetime" },
-    note: { sk: "Dátumy, časy a časové rozdiely bez manuálneho spracovania reťazcov.", en: "Work with dates, times and time differences without manually parsing strings." },
-    code: `from datetime import date, datetime
+    note: { sk: "Úloha: pracovať s dátumami, časmi a rozdielmi medzi dátumami bez ručného skladania reťazcov.", en: "Task: work with dates, times and date differences without manually building strings." },
+    code: `from datetime import date, datetime, timedelta
 
 today = date.today()
 now = datetime.now()
+tomorrow = today + timedelta(days=1)
+
 print(today.isoformat())
-print(now.strftime("%Y-%m-%d %H:%M"))`,
-    tip: { sk: "Pri čase závislom od časového pásma zváž timezone-aware datetime; samotné datetime.now() vracia lokálny čas bez explicitnej zóny.", en: "For timezone-dependent work, consider timezone-aware datetimes; datetime.now() alone returns local time without an explicit timezone." }
+print(now.strftime("%Y-%m-%d %H:%M"))
+print(tomorrow)`,
+    tip: { sk: "Typická chyba: považovať formátovaný text za objekt dátumu. strftime() vytvára reťazec; na prevod textu na datetime použi strptime(). Pri práci naprieč časovými pásmami používaj časové pásmo explicitne.", en: "Common mistake: treating formatted text as a date object. strftime() creates a string; use strptime() to parse text into a datetime. For work across time zones, specify the time zone explicitly." }
+  },
+  {
+    id: "csv",
+    title: { sk: "csv", en: "csv" },
+    note: { sk: "Úloha: čítať a zapisovať tabuľkové údaje uložené po riadkoch, napríklad zoznam študentov alebo výsledky.", en: "Task: read and write row-based tabular data such as a student list or results." },
+    code: `import csv
+
+with open("students.csv", newline="", encoding="utf-8") as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        print(row["name"], row["points"])`,
+    tip: { sk: "Typická chyba: zabudnúť na newline=\"\" pri open() alebo predpokladať, že hodnoty z CSV sú automaticky čísla. Údaje z DictReader sú reťazce, preto body pred výpočtom premeň napríklad cez int(row[\"points\"]).", en: "Common mistake: forgetting newline=\"\" in open() or assuming CSV values are automatically numbers. DictReader returns strings, so convert values before calculations, for example with int(row[\"points\"])." }
   },
   {
     id: "collections",
     title: { sk: "collections.Counter", en: "collections.Counter" },
-    note: { sk: "Počítanie výskytov hodnôt bez ručného udržiavania počítadiel.", en: "Count value occurrences without maintaining counters manually." },
+    note: { sk: "Úloha: rýchlo spočítať výskyty hodnôt, napríklad hlasy, známky alebo slová.", en: "Task: quickly count occurrences of values such as votes, grades or words." },
     code: `from collections import Counter
 
 votes = ["A", "B", "A", "C", "A"]
 counts = Counter(votes)
-print(counts["A"])  # 3
+
+print(counts["A"])          # 3
 print(counts.most_common(2))`,
-    tip: { sk: "Counter je užitočný na frekvencie. Ak potrebuješ len jedinečné hodnoty, môže stačiť set.", en: "Counter is useful for frequencies. If you only need unique values, a set may be enough." }
+    tip: { sk: "Typická chyba: očakávať, že Counter obsahuje iba hodnoty zo vstupu. Prístup k neexistujúcemu kľúču vráti 0, nie KeyError. Ak potrebuješ len unikátne hodnoty bez počítania, použi set.", en: "Common mistake: expecting Counter to contain only keys from the input. Accessing a missing key returns 0, not KeyError. If you only need unique values without counts, use set." }
   },
   {
     id: "re",
     title: { sk: "re", en: "re" },
-    note: { sk: "Vyhľadávanie a kontrola textu pomocou regulárnych výrazov.", en: "Search and validate text patterns with regular expressions." },
+    note: { sk: "Úloha: vyhľadávať alebo kontrolovať jednoduché textové vzory, napríklad číslo objednávky.", en: "Task: find or validate simple text patterns, such as an order number." },
     code: `import re
 
 text = "Order number: 4582"
 match = re.search(r"\\d+", text)
+
 if match:
-    order_number = int(match.group())`,
-    tip: { sk: "Regulárny výraz používaj na vzory textu, nie ako náhradu parsera pre zložitý formát.", en: "Use regular expressions for text patterns, not as a substitute for a parser for complex formats." }
+    order_number = int(match.group())
+    print(order_number)`,
+    tip: { sk: "Typická chyba: predpokladať, že re.search() vždy niečo nájde. Pri nenájdenej zhode vráti None, preto pred group() najprv skontroluj match. Regex nepoužívaj ako náhradu parsera pre zložité formáty.", en: "Common mistake: assuming re.search() always finds a match. If nothing matches, it returns None, so check match before calling group(). Do not use regex as a replacement for a parser for complex formats." }
   }
 ];
 
@@ -319,7 +416,7 @@ const categoryById: Record<string, string> = {
   enumerate: "collections", zip: "collections", unpacking: "collections", comprehensions: "collections",
   funkcie: "functions", arguments: "functions", "type-hints": "functions", dataclass: "functions",
   exceptions: "errors", imports: "modules",
-  oop: "oop", pathlib: "libraries", json: "libraries", datetime: "libraries", collections: "libraries", re: "libraries"
+  oop: "oop", "file-open": "files", "file-with": "files", pathlib: "files", "file-encoding": "files", "file-errors": "files", "file-practice": "files", json: "libraries", datetime: "libraries", csv: "libraries", collections: "libraries", re: "libraries"
 };
 const categoryLabels: Record<string, Pair> = {
   all: { sk: "Všetky témy", en: "All topics" },
@@ -329,7 +426,8 @@ const categoryLabels: Record<string, Pair> = {
   oop: { sk: "OOP", en: "OOP" },
   errors: { sk: "Chyby a výnimky", en: "Errors and exceptions" },
   modules: { sk: "Moduly", en: "Modules" },
-  libraries: { sk: "Základné knižnice", en: "Standard libraries" }
+  libraries: { sk: "Základné knižnice", en: "Standard libraries" },
+  files: { sk: "Súbory a cesty", en: "Files and Paths" }
 };
 const sections = [
   ...codeSections.map((section) => ({ id: section.id, label: section.title })),
@@ -395,6 +493,13 @@ const sections = [
                     <strong><LocalizedText sk="Tip" en="Tip" /></strong>
                     <p><LocalizedText sk={section.tip.sk} en={section.tip.en} /></p>
                   </aside>
+                )}
+                {section.resources && (
+                  <p class="cheat-download-links">
+                    {section.resources.map((resource) => (
+                      <a href={resource.href} download><LocalizedText sk={resource.label.sk} en={resource.label.en} /></a>
+                    ))}
+                  </p>
                 )}
               </section>
             ))
