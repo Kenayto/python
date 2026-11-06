@@ -531,6 +531,18 @@ const sections = [
   const cheatTocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-cheat-toc-link]"));
   const noResults = document.querySelector<HTMLElement>("#cheat-no-results");
 
+  // Mark links arriving from a Cookbook recipe so the related section can be highlighted.
+  const cameFromCookbook = new URLSearchParams(window.location.search).get("from") === "cookbook";
+  if (cameFromCookbook) {
+    document.body.classList.add("cookbook-origin");
+    const targetId = window.location.hash.slice(1);
+    const targetSection = targetId ? document.getElementById(targetId) : null;
+    if (targetSection?.matches("[data-cheat-section]")) {
+      targetSection.setAttribute("tabindex", "-1");
+      window.requestAnimationFrame(() => targetSection.focus({ preventScroll: true }));
+    }
+  }
+
   function applyCheatsheetFilters() {
     const query = searchInput?.value.trim().toLocaleLowerCase() ?? "";
     const category = categoryInput?.value ?? "all";

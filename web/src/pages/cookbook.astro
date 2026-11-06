@@ -1,0 +1,231 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CopyCodeBlock from "../components/CopyCodeBlock.astro";
+import LocalizedText from "../components/LocalizedText.astro";
+
+const recipes = [
+  {
+    id: "filter-sort-students",
+    titleSk: "Filtrovanie a zoradenie študentov",
+    titleEn: "Filter and sort student records",
+    taskSk: "Zo zoznamu študentov vyber tých, ktorí získali aspoň 80 bodov, a zorad ich od najvyššieho výsledku.",
+    taskEn: "Select students who scored at least 80 points and sort them from the highest score to the lowest.",
+    toolsSk: "List comprehension vyberie záznamy podľa podmienky. sorted() vytvorí nový zoradený zoznam a kľúčom sortovania je hodnota points.",
+    toolsEn: "A list comprehension filters records. sorted() creates a new sorted list, using the points value as the sort key.",
+    explainSk: "Podmienka v list comprehension ponechá iba študentov s aspoň 80 bodmi. sorted() zoradí výsledok podľa points; reverse=True nastaví zostupné poradie. enumerate() pridá poradové číslo.",
+    explainEn: "The condition in the list comprehension keeps students with at least 80 points. sorted() orders them by points; reverse=True sorts descending. enumerate() adds a position number.",
+    mistakeSk: "Nezabudni, že sorted() vracia nový zoznam. Metóda list.sort() mení pôvodný zoznam a vracia None.",
+    mistakeEn: "Remember that sorted() returns a new list. list.sort() changes the original list and returns None.",
+    link: "#list",
+    filename: "01-filter-sort-students.py",
+    code: "students = [\n    {\"name\": \"Anna\", \"points\": 92},\n    {\"name\": \"Peter\", \"points\": 67},\n    {\"name\": \"Lucia\", \"points\": 84},\n    {\"name\": \"Marek\", \"points\": 78},\n]\n\nqualified = [\n    student for student in students\n    if student[\"points\"] >= 80\n]\n\nranking = sorted(\n    qualified,\n    key=lambda student: student[\"points\"],\n    reverse=True,\n)\n\nfor position, student in enumerate(ranking, start=1):\n    print(f\"{position}. {student['name']}: {student['points']} points\")",
+  },
+  {
+    id: "count-repetitions",
+    titleSk: "Počítanie opakovaných hodnôt",
+    titleEn: "Count repeated values",
+    taskSk: "Zisti, ktoré témy sa v zozname úloh vyskytujú najčastejšie.",
+    taskEn: "Find which topics occur most often in a list of assignments.",
+    toolsSk: "Counter z collections spočíta výskyty jednotlivých hodnôt a most_common() vráti najčastejšie položky.",
+    toolsEn: "Counter from collections counts each value, and most_common() returns the most frequent items.",
+    explainSk: "Counter(topics) vytvorí počty výskytov. most_common() vráti dvojice (hodnota, počet) zoradené od najčastejšej.",
+    explainEn: "Counter(topics) counts occurrences. most_common() returns (value, count) pairs ordered from most frequent.",
+    mistakeSk: "Counter pracuje s hashovateľnými hodnotami. Ak potrebuješ počítať zložité záznamy, najprv vyber stabilný kľúč, napríklad názov témy.",
+    mistakeEn: "Counter works with hashable values. To count complex records, first select a stable key, such as the topic name.",
+    link: "#collections",
+    filename: "02-count-repetitions.py",
+    code: "from collections import Counter\n\ntopics = [\n    \"Python\", \"Databases\", \"Python\",\n    \"OOP\", \"Python\", \"Databases\",\n    \"Files\", \"OOP\", \"Python\",\n]\n\ncounts = Counter(topics)\n\nfor topic, amount in counts.most_common():\n    print(f\"{topic}: {amount}\")",
+  },
+  {
+    id: "read-json",
+    titleSk: "Načítanie údajov z JSON",
+    titleEn: "Read data from JSON",
+    taskSk: "Načítaj nastavenia aplikácie zo súboru JSON a bezpečne vypíš vybrané hodnoty.",
+    taskEn: "Load application settings from a JSON file and safely print selected values.",
+    toolsSk: "json.load() načíta JSON priamo zo súborového objektu. pathlib.Path vytvorí cestu k súboru a výnimka zachytí chýbajúci alebo neplatný súbor.",
+    toolsEn: "json.load() reads JSON directly from a file object. pathlib.Path builds the file path, while exceptions handle missing or invalid files.",
+    explainSk: "Path(__file__).with_name() nájde dátový súbor vedľa skriptu. json.load(file) načíta obsah a get() umožní použiť predvolenú hodnotu, ak kľúč chýba.",
+    explainEn: "Path(__file__).with_name() locates the data file beside the script. json.load(file) reads it, and get() supplies a default when a key is missing.",
+    mistakeSk: "Nezamieňaj json.load() a json.loads(): prvá funkcia číta zo súboru, druhá z textového reťazca. JSON hodnoty môžu byť napríklad dict, list, str alebo čísla.",
+    mistakeEn: "Do not confuse json.load() and json.loads(): the first reads from a file, the second from a string. JSON values may be dicts, lists, strings, or numbers.",
+    link: "#json",
+    filename: "03-read-json.py",
+    code: "import json\nfrom pathlib import Path\n\ndata_file = Path(__file__).with_name(\"settings-sample.json\")\n\ntry:\n    with data_file.open(\"r\", encoding=\"utf-8\") as file:\n        settings = json.load(file)\nexcept FileNotFoundError:\n    print(f\"File not found: {data_file.name}\")\nexcept json.JSONDecodeError as error:\n    print(f\"Invalid JSON: {error}\")\nelse:\n    print(\"Application:\", settings.get(\"application\", \"Unknown\"))\n    print(\"Language:\", settings.get(\"language\", \"en\"))\n    print(\"Notifications:\", settings.get(\"notifications\", False))",
+    datafile: "settings-sample.json",
+  },
+  {
+    id: "process-csv",
+    titleSk: "Spracovanie CSV tabuľky",
+    titleEn: "Process a CSV table",
+    taskSk: "Načítaj výsledky zo súboru CSV, premeň body na čísla a vypočítaj priemer.",
+    taskEn: "Read results from a CSV file, convert scores to numbers, and calculate the average.",
+    toolsSk: "csv.DictReader sprístupní každý riadok ako slovník s názvami stĺpcov. int() prevedie textové body na celé čísla.",
+    toolsEn: "csv.DictReader exposes each row as a dictionary keyed by column names. int() converts text scores into integers.",
+    explainSk: "DictReader sprístupní stĺpce podľa ich názvov. int() konvertuje body z textu na celé čísla. Priemer sa počíta ako súčet delený počtom záznamov.",
+    explainEn: "DictReader accesses columns by name. int() converts score text to integers. The average is the sum divided by the number of records.",
+    mistakeSk: "Hodnoty z CSV sú textové. Pred matematickými operáciami ich preveď na čísla a pri open() používaj newline=\"\" a encoding=\"utf-8\".",
+    mistakeEn: "CSV values are strings. Convert them before calculations, and use newline=\"\" and encoding=\"utf-8\" when opening the file.",
+    link: "#csv",
+    filename: "04-process-csv.py",
+    code: "import csv\nfrom pathlib import Path\n\ncsv_file = Path(__file__).with_name(\"students-sample.csv\")\nscores = []\n\ntry:\n    with csv_file.open(\"r\", newline=\"\", encoding=\"utf-8\") as file:\n        reader = csv.DictReader(file)\n        for row in reader:\n            scores.append(int(row[\"points\"]))\nexcept FileNotFoundError:\n    print(f\"File not found: {csv_file.name}\")\nexcept (KeyError, ValueError) as error:\n    print(f\"Invalid CSV data: {error}\")\nelse:\n    if scores:\n        average = sum(scores) / len(scores)\n        print(f\"Records: {len(scores)}\")\n        print(f\"Average score: {average:.1f}\")\n    else:\n        print(\"The CSV file contains no records.\")",
+    datafile: "students-sample.csv",
+  },
+  {
+    id: "find-files",
+    titleSk: "Vyhľadávanie súborov podľa prípony",
+    titleEn: "Find files by extension",
+    taskSk: "Nájdi v zadanom priečinku všetky Python súbory vrátane podpriečinkov a vypíš ich relatívne cesty.",
+    taskEn: "Find all Python files in a folder, including subfolders, and print their relative paths.",
+    toolsSk: "Path.rglob() rekurzívne prehľadá priečinok. suffix umožní filtrovať podľa prípony a is_file() vylúči adresáre.",
+    toolsEn: "Path.rglob() searches a folder recursively. suffix filters by extension, and is_file() excludes directories.",
+    explainSk: "rglob(\"*.py\") prehľadá aj vnorené priečinky. is_file() overí, že výsledok je súbor, a sorted() zabezpečí stabilné poradie výpisu.",
+    explainEn: "rglob(\"*.py\") searches nested folders too. is_file() confirms each result is a file, and sorted() makes the output order predictable.",
+    mistakeSk: "Kontroluj, či priečinok existuje a či ide o adresár. Pri veľkých priečinkoch môže rekurzívne vyhľadávanie trvať dlhšie.",
+    mistakeEn: "Check that the folder exists and is a directory. Recursive searches may take longer in large folders.",
+    link: "#pathlib",
+    filename: "05-find-files.py",
+    extraFile: "examples/example_task.py",
+    code: "from pathlib import Path\n\nroot = Path(__file__).parent\nsearch_folder = root / \"examples\"\n\nif not search_folder.is_dir():\n    print(f\"Folder does not exist: {search_folder}\")\nelse:\n    python_files = sorted(\n        path for path in search_folder.rglob(\"*.py\")\n        if path.is_file()\n    )\n\n    if not python_files:\n        print(\"No Python files found.\")\n    else:\n        for path in python_files:\n            print(path.relative_to(search_folder))",
+  },
+  {
+    id: "validate-text",
+    titleSk: "Kontrola textového formátu",
+    titleEn: "Validate a text format",
+    taskSk: "Over, či identifikátor študenta zodpovedá formátu dvoch veľkých písmen a štyroch číslic, napríklad AB1234.",
+    taskEn: "Check whether a student identifier follows two uppercase letters and four digits, for example AB1234.",
+    toolsSk: "Modul re umožňuje opísať formát pomocou regulárneho výrazu. re.fullmatch() vyžaduje zhodu celého reťazca.",
+    toolsEn: "The re module describes a format with a regular expression. re.fullmatch() requires the entire string to match.",
+    explainSk: "Regulárny výraz [A-Z]{2}\\d{4} znamená dve veľké písmená a štyri číslice. fullmatch() kontroluje celý vstup, nie iba jeho časť.",
+    explainEn: "The regular expression [A-Z]{2}\\d{4} means two uppercase letters followed by four digits. fullmatch() validates the entire input, not just a substring.",
+    mistakeSk: "re.search() hľadá zhodu kdekoľvek v texte. Pri kontrole celého identifikátora použi fullmatch(), nie search().",
+    mistakeEn: "re.search() looks for a match anywhere in the text. Use fullmatch(), not search(), to validate the entire identifier.",
+    link: "#re",
+    filename: "06-validate-text.py",
+    code: "import re\n\npattern = r\"[A-Z]{2}\\d{4}\"\nidentifiers = [\"AB1234\", \"xy1234\", \"ABC1234\", \"CD5678\"]\n\nfor identifier in identifiers:\n    if re.fullmatch(pattern, identifier):\n        print(f\"{identifier}: valid\")\n    else:\n        print(f\"{identifier}: invalid\")",
+  },
+  {
+    id: "date-difference",
+    titleSk: "Výpočet rozdielu medzi dátumami",
+    titleEn: "Calculate the difference between dates",
+    taskSk: "Vypočítaj, koľko dní zostáva do termínu odovzdania projektu.",
+    taskEn: "Calculate how many days remain until a project deadline.",
+    toolsSk: "date.fromisoformat() prevedie dátum vo formáte RRRR-MM-DD na objekt date. Odčítanie dátumov vytvorí timedelta.",
+    toolsEn: "date.fromisoformat() converts a YYYY-MM-DD string into a date object. Subtracting dates produces a timedelta.",
+    explainSk: "fromisoformat() vytvorí objekt date z reťazca. Rozdiel dvoch dátumov je timedelta; jeho days obsahuje počet dní medzi nimi.",
+    explainEn: "fromisoformat() creates a date object from a string. Subtracting dates produces a timedelta; its days attribute gives the day difference.",
+    mistakeSk: "Dátumy neporovnávaj ako ľubovoľné textové reťazce. Najprv ich premeň na date; dávaj pozor aj na správny formát vstupu.",
+    mistakeEn: "Do not compare arbitrary date strings. Convert them to date objects first, and validate the input format.",
+    link: "#datetime",
+    filename: "07-date-difference.py",
+    code: "from datetime import date\n\ndeadline_text = \"2026-12-15\"\n\ntry:\n    deadline = date.fromisoformat(deadline_text)\nexcept ValueError:\n    print(\"Use the YYYY-MM-DD date format.\")\nelse:\n    today = date.today()\n    difference = (deadline - today).days\n\n    if difference > 0:\n        print(f\"{difference} days remaining.\")\n    elif difference == 0:\n        print(\"The deadline is today.\")\n    else:\n        print(f\"The deadline passed {-difference} days ago.\")",
+  },
+  {
+    id: "group-records",
+    titleSk: "Zoskupovanie záznamov podľa kategórie",
+    titleEn: "Group records by category",
+    taskSk: "Rozdeľ zoznam študentov do skupín podľa predmetu a vypíš mená v každej skupine.",
+    taskEn: "Group a list of students by course and print the names in each group.",
+    toolsSk: "defaultdict(list) automaticky vytvorí prázdny zoznam pre novú kategóriu. Následne stačí pridávať mená podľa predmetu.",
+    toolsEn: "defaultdict(list) automatically creates an empty list for a new category. Names can then be appended by course.",
+    explainSk: "defaultdict(list) pripraví nový zoznam pri prvom výskyte kategórie. append() pridá meno do správnej skupiny a sorted() zoradí skupiny pri výpise.",
+    explainEn: "defaultdict(list) creates a new list when a category first appears. append() adds a name to its group, and sorted() orders the groups for display.",
+    mistakeSk: "Pri obyčajnom dict musíš pred pridaním hodnoty overiť, či kľúč existuje. defaultdict(list) tento krok zjednodušuje.",
+    mistakeEn: "With a regular dict, you must check whether a key exists before appending. defaultdict(list) simplifies this step.",
+    link: "#collections",
+    filename: "08-group-records.py",
+    code: "from collections import defaultdict\n\nstudents = [\n    {\"name\": \"Anna\", \"course\": \"Python\"},\n    {\"name\": \"Peter\", \"course\": \"Databases\"},\n    {\"name\": \"Lucia\", \"course\": \"Python\"},\n    {\"name\": \"Marek\", \"course\": \"OOP\"},\n    {\"name\": \"Eva\", \"course\": \"Databases\"},\n]\n\ngroups = defaultdict(list)\n\nfor student in students:\n    groups[student[\"course\"]].append(student[\"name\"])\n\nfor course, names in sorted(groups.items()):\n    print(f\"{course}: {', '.join(names)}\")",
+  },
+] as const;
+---
+
+
+<BaseLayout
+  title="Python Cookbook — praktické recepty"
+  titleEn="Python Cookbook — practical recipes"
+  description="Praktické recepty na riešenie bežných úloh v Pythone s úplným kódom a vysvetleniami."
+  descriptionEn="Practical recipes for common Python tasks, with complete code and explanations."
+>
+  <main class="page text-page cookbook-page">
+    <header class="cookbook-header">
+      <p class="clean-code-kicker"><LocalizedText sk="PRAKTICKÁ REFERENCIA · PYTHON QUICK REFERENCE" en="PRACTICAL REFERENCE · PYTHON QUICK REFERENCE" /></p>
+      <h1>Python Cookbook</h1>
+      <p class="cookbook-lead"><LocalizedText
+        sk="Zbierka hotových riešení bežných programátorských úloh. Každý recept ukazuje, ako spojiť viacero nástrojov Pythonu do jedného spustiteľného riešenia."
+        en="A collection of complete solutions to common programming tasks. Each recipe shows how to combine Python tools into one runnable solution."
+      /></p>
+      <div class="clean-code-actions cookbook-actions">
+        <a href="/cheatsheet/"><LocalizedText sk="← Späť na Python ťahák" en="← Back to Python cheatsheet" /></a>
+        <a href="/best-practices/"><LocalizedText sk="Best Practices / Clean Code →" en="Best Practices / Clean Code →" /></a>
+        <button type="button" id="cookbook-print"><LocalizedText sk="Exportovať PDF" en="Export PDF" /></button>
+      </div>
+    </header>
+
+    <aside class="cookbook-intro">
+      <h2><LocalizedText sk="Ako používať recepty" en="How to use the recipes" /></h2>
+      <p><LocalizedText
+        sk="Najprv si prečítaj zadanie a výber nástrojov. Potom spusti celý príklad alebo si stiahni súbor .py. Recepty sú samostatné programy; pri receptoch JSON a CSV musí byť dátový súbor v rovnakom priečinku ako Python skript."
+        en="Read the task and tool selection first. Then run the complete example or download the .py file. Recipes are standalone programs; for the JSON and CSV recipes, keep the data file in the same folder as the Python script."
+      /></p>
+      <p><LocalizedText sk="Príklady používajú iba štandardnú knižnicu Pythonu a nevyžadujú inštaláciu externých balíkov." en="The examples use only the Python standard library and do not require external packages." /></p>
+    </aside>
+
+    <nav class="cookbook-toc" aria-label="Obsah receptov">
+      <strong><LocalizedText sk="Recepty" en="Recipes" /></strong>
+      {recipes.map((recipe, index) => (
+        <a href={`#${recipe.id}`}>{index + 1}. <LocalizedText sk={recipe.titleSk} en={recipe.titleEn} /></a>
+      ))}
+    </nav>
+
+    <div class="cookbook-recipes">
+      {recipes.map((recipe, index) => (
+        <article class="cookbook-recipe" id={recipe.id}>
+          <div class="cookbook-recipe__heading">
+            <span class="cookbook-recipe__number">{String(index + 1).padStart(2, "0")}</span>
+            <h2><LocalizedText sk={recipe.titleSk} en={recipe.titleEn} /></h2>
+          </div>
+          <section>
+            <h3><LocalizedText sk="Úloha" en="Task" /></h3>
+            <p><LocalizedText sk={recipe.taskSk} en={recipe.taskEn} /></p>
+          </section>
+          <section>
+            <h3><LocalizedText sk="Prečo tieto nástroje?" en="Why these tools?" /></h3>
+            <p><LocalizedText sk={recipe.toolsSk} en={recipe.toolsEn} /></p>
+          </section>
+          <section>
+            <h3><LocalizedText sk="Vysvetlenie kľúčových riadkov" en="Key lines explained" /></h3>
+            <p><LocalizedText sk={recipe.explainSk} en={recipe.explainEn} /></p>
+          </section>
+          <section>
+            <h3><LocalizedText sk="Úplné riešenie" en="Complete solution" /></h3>
+            <CopyCodeBlock code={recipe.code} />
+            <div class="cookbook-downloads">
+              <a href={`/downloads/cookbook/${recipe.filename}`} download><LocalizedText sk="Stiahnuť Python súbor" en="Download Python file" /></a>
+              {recipe.datafile && <span><LocalizedText sk="Dátový súbor:" en="Sample data:" /> <a href={`/downloads/cookbook/${recipe.datafile}`} download>{recipe.datafile}</a></span>}
+              {recipe.extraFile && <span><LocalizedText sk="Ukážkový súbor:" en="Example file:" /> <a href={`/downloads/cookbook/${recipe.extraFile}`} download>{recipe.extraFile}</a></span>}
+            </div>
+          </section>
+          <section class="cookbook-mistake">
+            <h3><LocalizedText sk="Typická chyba" en="Common mistake" /></h3>
+            <p><LocalizedText sk={recipe.mistakeSk} en={recipe.mistakeEn} /></p>
+          </section>
+          <p class="cookbook-related"><LocalizedText sk="Súvisiaca téma v Cheatsheete:" en="Related Cheatsheet topic:" /> <a href={`/cheatsheet/${recipe.link}`}><LocalizedText sk="Otvoriť tému" en="Open topic" /></a></p>
+        </article>
+      ))}
+    </div>
+
+    <footer class="cookbook-footer">
+      <p><strong><LocalizedText sk="Poznámka k materiálu" en="About this material" /></strong></p>
+      <p><LocalizedText
+        sk="Recepty sú určené na precvičovanie a ako vzory riešenia. Pri použití v inom projekte uprav názvy súborov, vstupné údaje a kontroly podľa konkrétneho zadania."
+        en="The recipes are intended for practice and as solution patterns. When using them in another project, adapt file names, input data, and validation to the actual task."
+      /></p>
+      <p><a href="https://docs.python.org/3/library/" target="_blank" rel="noreferrer"><LocalizedText sk="Oficiálna dokumentácia Pythonu: Štandardná knižnica" en="Official Python documentation: The Python Standard Library" /></a></p>
+    </footer>
+  </main>
+</BaseLayout>
+
+<script>
+  document.querySelector<HTMLButtonElement>("#cookbook-print")?.addEventListener("click", () => {
+    window.print();
+  });
+</script>
